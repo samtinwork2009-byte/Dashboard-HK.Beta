@@ -4,11 +4,16 @@
 		{
 			"type": "npm",
 			"script": "lint:fix",
-			"problemMatcher": [
-				"$eslint-stylish"
-			],
+			"problemMatcher": ["$eslint-stylish"],
 			"label": "npm: lint:fix",
 			"detail": "eslint --fix"
+		},
+		{
+			"type": "npm",
+			"script": "fmt",
+			"problemMatcher": [],
+			"label": "npm: fmt",
+			"detail": "prettier --write ."
 		}
 	]
 }

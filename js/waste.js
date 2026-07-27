@@ -7,156 +7,156 @@
 "use strict";
 
 const Waste = (function () {
-  const EPD_HOTLINE = "2838 3111";
-  const EPD_URL =
-    "https://www.epd.gov.hk/epd/tc_chi/environmentinhk/waste/prob_solutions/prob_solutions.html";
-  const RECYCLING_URL =
-    "https://www.wastereduction.gov.hk/tc/household/index.html";
-  const BULK_PICKUP_URL =
-    "https://www.epd.gov.hk/epd/tc_chi/environmentinhk/waste/collections/bulky_waste.html";
-  const FOOD_WASTE_URL =
-    "https://www.wastereduction.gov.hk/tc/foodwaste/food_waste_recycling.html";
+	const EPD_HOTLINE = "2838 3111";
+	const EPD_URL =
+		"https://www.epd.gov.hk/epd/tc_chi/environmentinhk/waste/prob_solutions/prob_solutions.html";
+	const RECYCLING_URL =
+		"https://www.wastereduction.gov.hk/tc/household/index.html";
+	const BULK_PICKUP_URL =
+		"https://www.epd.gov.hk/epd/tc_chi/environmentinhk/waste/collections/bulky_waste.html";
+	const FOOD_WASTE_URL =
+		"https://www.wastereduction.gov.hk/tc/foodwaste/food_waste_recycling.html";
 
-  const DAYS_ZH = ["日", "一", "二", "三", "四", "五", "六"];
+	const DAYS_ZH = ["日", "一", "二", "三", "四", "五", "六"];
 
-  /* ── District recycling info ─────────────────────────────── */
-  const DISTRICTS = [
-    {
-      id: "TM",
-      name: "屯門區 Tuen Mun",
-      foodWaste: true,
-      note: "屯門各屋邨均設有廚餘機",
-    },
-    {
-      id: "YL",
-      name: "元朗區 Yuen Long",
-      foodWaste: true,
-      note: "元朗市中心多個廚餘收集點",
-    },
-    {
-      id: "TSW",
-      name: "天水圍 Tin Shui Wai",
-      foodWaste: true,
-      note: "嘉湖山莊設廚餘機",
-    },
-    {
-      id: "TW",
-      name: "荃灣區 Tsuen Wan",
-      foodWaste: true,
-      note: "荃灣多個屋邨設廚餘機",
-    },
-    { id: "KC", name: "葵青區 Kwai Tsing", foodWaste: false, note: "" },
-    {
-      id: "ST",
-      name: "沙田區 Sha Tin",
-      foodWaste: true,
-      note: "沙田各大型屋邨設廚餘機",
-    },
-    { id: "TP", name: "大埔區 Tai Po", foodWaste: false, note: "" },
-    { id: "NO", name: "北區 North District", foodWaste: false, note: "" },
-    { id: "SK", name: "西貢區 Sai Kung", foodWaste: false, note: "" },
-    {
-      id: "KT",
-      name: "觀塘區 Kwun Tong",
-      foodWaste: true,
-      note: "觀塘多個公共屋邨設廚餘機",
-    },
-    {
-      id: "WC",
-      name: "灣仔區 Wan Chai",
-      foodWaste: true,
-      note: "灣仔市區多個收集點",
-    },
-    { id: "E", name: "東區 Eastern", foodWaste: false, note: "" },
-    { id: "S", name: "南區 Southern", foodWaste: false, note: "" },
-    {
-      id: "CW",
-      name: "中西區 Central & Western",
-      foodWaste: true,
-      note: "上環及中環多個廚餘收集點",
-    },
-    { id: "YTM", name: "油尖旺區 Yau Tsim Mong", foodWaste: false, note: "" },
-    { id: "SSP", name: "深水埗區 Sham Shui Po", foodWaste: false, note: "" },
-    { id: "KS", name: "九龍城區 Kowloon City", foodWaste: false, note: "" },
-    { id: "WT", name: "黃大仙區 Wong Tai Sin", foodWaste: false, note: "" },
-    { id: "IS", name: "離島區 Islands", foodWaste: false, note: "" },
-  ];
+	/* ── District recycling info ─────────────────────────────── */
+	const DISTRICTS = [
+		{
+			id: "TM",
+			name: "屯門區 Tuen Mun",
+			foodWaste: true,
+			note: "屯門各屋邨均設有廚餘機",
+		},
+		{
+			id: "YL",
+			name: "元朗區 Yuen Long",
+			foodWaste: true,
+			note: "元朗市中心多個廚餘收集點",
+		},
+		{
+			id: "TSW",
+			name: "天水圍 Tin Shui Wai",
+			foodWaste: true,
+			note: "嘉湖山莊設廚餘機",
+		},
+		{
+			id: "TW",
+			name: "荃灣區 Tsuen Wan",
+			foodWaste: true,
+			note: "荃灣多個屋邨設廚餘機",
+		},
+		{ id: "KC", name: "葵青區 Kwai Tsing", foodWaste: false, note: "" },
+		{
+			id: "ST",
+			name: "沙田區 Sha Tin",
+			foodWaste: true,
+			note: "沙田各大型屋邨設廚餘機",
+		},
+		{ id: "TP", name: "大埔區 Tai Po", foodWaste: false, note: "" },
+		{ id: "NO", name: "北區 North District", foodWaste: false, note: "" },
+		{ id: "SK", name: "西貢區 Sai Kung", foodWaste: false, note: "" },
+		{
+			id: "KT",
+			name: "觀塘區 Kwun Tong",
+			foodWaste: true,
+			note: "觀塘多個公共屋邨設廚餘機",
+		},
+		{
+			id: "WC",
+			name: "灣仔區 Wan Chai",
+			foodWaste: true,
+			note: "灣仔市區多個收集點",
+		},
+		{ id: "E", name: "東區 Eastern", foodWaste: false, note: "" },
+		{ id: "S", name: "南區 Southern", foodWaste: false, note: "" },
+		{
+			id: "CW",
+			name: "中西區 Central & Western",
+			foodWaste: true,
+			note: "上環及中環多個廚餘收集點",
+		},
+		{ id: "YTM", name: "油尖旺區 Yau Tsim Mong", foodWaste: false, note: "" },
+		{ id: "SSP", name: "深水埗區 Sham Shui Po", foodWaste: false, note: "" },
+		{ id: "KS", name: "九龍城區 Kowloon City", foodWaste: false, note: "" },
+		{ id: "WT", name: "黃大仙區 Wong Tai Sin", foodWaste: false, note: "" },
+		{ id: "IS", name: "離島區 Islands", foodWaste: false, note: "" },
+	];
 
-  /* ── Recycling bin colors ────────────────────────────────── */
-  const RECYCLING_BINS = [
-    {
-      color: "#0066cc",
-      colorName: "藍色",
-      emoji: "🔵",
-      accepts: "廢紙",
-      en: "Paper",
-      examples: "報紙、雜誌、紙皮、紙盒（乾淨無污染）",
-    },
-    {
-      color: "#FFD700",
-      colorName: "黃色",
-      emoji: "🟡",
-      accepts: "金屬",
-      en: "Metal",
-      examples: "鋁罐、鐵罐、金屬製品（清空並沖洗）",
-    },
-    {
-      color: "#228B22",
-      colorName: "啡色",
-      emoji: "🟤",
-      accepts: "膠樽",
-      en: "Plastic",
-      examples: "飲料膠樽（PET）、清潔劑瓶（HDPE）",
-    },
-  ];
+	/* ── Recycling bin colors ────────────────────────────────── */
+	const RECYCLING_BINS = [
+		{
+			color: "#0066cc",
+			colorName: "藍色",
+			emoji: "🔵",
+			accepts: "廢紙",
+			en: "Paper",
+			examples: "報紙、雜誌、紙皮、紙盒（乾淨無污染）",
+		},
+		{
+			color: "#FFD700",
+			colorName: "黃色",
+			emoji: "🟡",
+			accepts: "金屬",
+			en: "Metal",
+			examples: "鋁罐、鐵罐、金屬製品（清空並沖洗）",
+		},
+		{
+			color: "#228B22",
+			colorName: "啡色",
+			emoji: "🟤",
+			accepts: "膠樽",
+			en: "Plastic",
+			examples: "飲料膠樽（PET）、清潔劑瓶（HDPE）",
+		},
+	];
 
-  /* ── Determine collection status ────────────────────────── */
-  function getCollectionStatus() {
-    const now = new Date();
-    const dow = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
-    const hour = now.getHours();
+	/* ── Determine collection status ────────────────────────── */
+	function getCollectionStatus() {
+		const now = new Date();
+		const dow = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+		const hour = now.getHours();
 
-    // Waste collection in Hong Kong: Mon-Sat (most areas)
-    const isCollectionDay = dow >= 1 && dow <= 6;
-    const isCollectionTime = hour >= 7 && hour <= 18;
+		// Waste collection in Hong Kong: Mon-Sat (most areas)
+		const isCollectionDay = dow >= 1 && dow <= 6;
+		const isCollectionTime = hour >= 7 && hour <= 18;
 
-    if (isCollectionDay) {
-      return {
-        today: true,
-        ongoing: isCollectionTime,
-        message: isCollectionTime
-          ? "今日垃圾收集進行中 (07:00–18:00)"
-          : hour < 7
-            ? "今日垃圾收集將於 07:00 開始"
-            : "今日垃圾收集已完成",
-        color: isCollectionTime ? "var(--success)" : "var(--text-muted)",
-        icon: "🗑",
-      };
-    } else {
-      // Sunday — find next Monday
-      const daysUntilMon = 1; // always 1 day away from Sunday
-      return {
-        today: false,
-        ongoing: false,
-        message: `今天（星期日）不收垃圾，下次收集：明天（星期一）07:00`,
-        color: "var(--text-faint)",
-        icon: "📅",
-        nextDay: "明天 (星期一)",
-        hoursUntil: 24 - hour + 7,
-      };
-    }
-  }
+		if (isCollectionDay) {
+			return {
+				today: true,
+				ongoing: isCollectionTime,
+				message: isCollectionTime
+					? "今日垃圾收集進行中 (07:00–18:00)"
+					: hour < 7
+						? "今日垃圾收集將於 07:00 開始"
+						: "今日垃圾收集已完成",
+				color: isCollectionTime ? "var(--success)" : "var(--text-muted)",
+				icon: "🗑",
+			};
+		} else {
+			// Sunday — find next Monday
+			const daysUntilMon = 1; // always 1 day away from Sunday
+			return {
+				today: false,
+				ongoing: false,
+				message: `今天（星期日）不收垃圾，下次收集：明天（星期一）07:00`,
+				color: "var(--text-faint)",
+				icon: "📅",
+				nextDay: "明天 (星期一)",
+				hoursUntil: 24 - hour + 7,
+			};
+		}
+	}
 
-  /* ── Render today collection status ─────────────────────── */
-  function renderCollectionStatus() {
-    const el = document.getElementById("waste-collection-status");
-    if (!el) return;
+	/* ── Render today collection status ─────────────────────── */
+	function renderCollectionStatus() {
+		const el = document.getElementById("waste-collection-status");
+		if (!el) return;
 
-    const status = getCollectionStatus();
-    const now = new Date();
-    const dowZh = DAYS_ZH[now.getDay()];
+		const status = getCollectionStatus();
+		const now = new Date();
+		const dowZh = DAYS_ZH[now.getDay()];
 
-    el.innerHTML = `
+		el.innerHTML = `
       <div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
         <div style="font-size:2rem">${status.icon}</div>
         <div>
@@ -168,37 +168,37 @@ const Waste = (function () {
           </div>
         </div>
         ${
-          status.today && status.ongoing
-            ? `
+					status.today && status.ongoing
+						? `
           <div style="margin-left:auto">
             <span class="tag tag-green" style="font-size:var(--text-xs)">收集中</span>
           </div>
         `
-            : status.today
-              ? `
+						: status.today
+							? `
           <div style="margin-left:auto">
             <span class="tag tag-muted" style="font-size:var(--text-xs)">今日完成/未開始</span>
           </div>
         `
-              : `
+							: `
           <div style="margin-left:auto">
             <span class="tag tag-muted" style="font-size:var(--text-xs)">休息日</span>
           </div>
         `
-        }
+				}
       </div>
     `;
-  }
+	}
 
-  /* ── Render recycling bin guide ──────────────────────────── */
-  function renderRecyclingGuide() {
-    const el = document.getElementById("waste-recycling-guide");
-    if (!el) return;
+	/* ── Render recycling bin guide ──────────────────────────── */
+	function renderRecyclingGuide() {
+		const el = document.getElementById("waste-recycling-guide");
+		if (!el) return;
 
-    el.innerHTML = `
+		el.innerHTML = `
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-3);margin-bottom:var(--sp-4)">
         ${RECYCLING_BINS.map(
-          (bin) => `
+					(bin) => `
           <div style="padding:var(--sp-4);background:var(--surface-2);border-radius:var(--r-lg);
                       border-left:4px solid ${bin.color}">
             <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
@@ -213,7 +213,7 @@ const Waste = (function () {
             </div>
           </div>
         `,
-        ).join("")}
+				).join("")}
       </div>
       <div style="padding:var(--sp-3);background:var(--surface-2);border-radius:var(--r-md);
                   border-left:3px solid var(--info);margin-bottom:var(--sp-3)">
@@ -223,14 +223,14 @@ const Waste = (function () {
         </div>
       </div>
     `;
-  }
+	}
 
-  /* ── Render bulk waste + special services ───────────────── */
-  function renderSpecialServices() {
-    const el = document.getElementById("waste-special-services");
-    if (!el) return;
+	/* ── Render bulk waste + special services ───────────────── */
+	function renderSpecialServices() {
+		const el = document.getElementById("waste-special-services");
+		if (!el) return;
 
-    el.innerHTML = `
+		el.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:var(--sp-3)">
 
         <!-- Bulk item pickup -->
@@ -291,14 +291,14 @@ const Waste = (function () {
         </div>
       </div>
     `;
-  }
+	}
 
-  /* ── Render district selector + food waste info ─────────── */
-  function renderDistrictInfo() {
-    const el = document.getElementById("waste-district-info");
-    if (!el) return;
+	/* ── Render district selector + food waste info ─────────── */
+	function renderDistrictInfo() {
+		const el = document.getElementById("waste-district-info");
+		if (!el) return;
 
-    el.innerHTML = `
+		el.innerHTML = `
       <div style="margin-bottom:var(--sp-3)">
         <select id="waste-district-select" onchange="Waste.onDistrictChange()"
           style="background:var(--surface-2);border:1px solid var(--border);
@@ -312,21 +312,21 @@ const Waste = (function () {
         請選擇您所在地區查看詳細資訊
       </div>
     `;
-  }
+	}
 
-  /* ── District change handler ─────────────────────────────── */
-  function onDistrictChange() {
-    const sel = document.getElementById("waste-district-select");
-    const detailEl = document.getElementById("waste-district-detail");
-    if (!sel || !detailEl) return;
+	/* ── District change handler ─────────────────────────────── */
+	function onDistrictChange() {
+		const sel = document.getElementById("waste-district-select");
+		const detailEl = document.getElementById("waste-district-detail");
+		if (!sel || !detailEl) return;
 
-    const d = DISTRICTS.find((x) => x.id === sel.value);
-    if (!d) {
-      detailEl.innerHTML = `<span style="color:var(--text-faint)">請選擇您所在地區查看詳細資訊</span>`;
-      return;
-    }
+		const d = DISTRICTS.find((x) => x.id === sel.value);
+		if (!d) {
+			detailEl.innerHTML = `<span style="color:var(--text-faint)">請選擇您所在地區查看詳細資訊</span>`;
+			return;
+		}
 
-    detailEl.innerHTML = `
+		detailEl.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:var(--sp-2)">
         <div class="row-item">
           <span class="row-name">垃圾收集日</span>
@@ -340,11 +340,11 @@ const Waste = (function () {
           <span class="row-name">廚餘機</span>
           <span class="row-val">
             ${
-              d.foodWaste
-                ? `<span class="tag tag-green">設有</span>` +
-                  (d.note ? ` · ${d.note}` : "")
-                : '<span class="tag tag-muted">暫無/待確認</span>'
-            }
+							d.foodWaste
+								? `<span class="tag tag-green">設有</span>` +
+									(d.note ? ` · ${d.note}` : "")
+								: '<span class="tag tag-muted">暫無/待確認</span>'
+						}
           </span>
         </div>
         <div class="row-item">
@@ -353,15 +353,15 @@ const Waste = (function () {
         </div>
       </div>
     `;
-  }
+	}
 
-  /* ── Main refresh ────────────────────────────────────────── */
-  function refresh() {
-    renderCollectionStatus();
-    renderRecyclingGuide();
-    renderSpecialServices();
-    renderDistrictInfo();
-  }
+	/* ── Main refresh ────────────────────────────────────────── */
+	function refresh() {
+		renderCollectionStatus();
+		renderRecyclingGuide();
+		renderSpecialServices();
+		renderDistrictInfo();
+	}
 
-  return { refresh, onDistrictChange };
+	return { refresh, onDistrictChange };
 })();

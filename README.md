@@ -20,12 +20,12 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 
 ## 📸 Screenshots
 
-| 總覽 Overview | 天氣 Weather | 巴士 Bus ETA |
-|---|---|---|
+| 總覽 Overview                                                             | 天氣 Weather                                                                    | 巴士 Bus ETA                                                                |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | ![Home](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=總覽+Home) | ![Weather](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=天氣+Weather) | ![Bus](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=巴士+Bus+ETA) |
 
-| 地圖 Map | 潮汐 Tides | 假期 Holidays |
-|---|---|---|
+| 地圖 Map                                                                    | 潮汐 Tides                                                                  | 假期 Holidays                                                                     |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | ![Map](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=互動地圖+Map) | ![Tides](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=潮汐+Tides) | ![Holidays](https://via.placeholder.com/300x200/0d1b2e/60a5fa?text=假期+Holidays) |
 
 ---
@@ -33,6 +33,7 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 ## ✨ Features · 功能
 
 ### 🌤 天氣 Weather
+
 - **實時天氣** — 氣溫、濕度、紫外線、海水溫度（香港天文台 HKO）
 - **九天預報** — 圖示、最高/最低溫、降雨概率
 - **本地天氣預報全文** — 天氣概況、預測、展望
@@ -41,11 +42,13 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 - **各區降雨量** — 過去一小時降雨數據
 
 ### 🚇 交通 Transport
+
 - **港鐵班次** — 所有路線實時班次，10秒刷新
 - **輕鐵班次** — 各站各月台分組顯示
 - **MTR 服務狀況** — 8條主要路線是否正常，故障即時提示
 
 ### 🚌 巴士 Bus ETA
+
 - **路線搜尋** — 輸入路線號，自動列出所有站點，點擊即顯示到站時間
 - **KMB 九巴** — 全港 1600+ 路線，實時 ETA
 - **CTB 城巴** — 實時到站時間
@@ -53,57 +56,69 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 - **常用站點** — 預設屯門/兆康/龍門居等新界常用路線
 
 ### 🌊 潮汐 Tides
+
 - **逐時潮汐圖** — SVG 折線圖顯示今日 24 小時潮汐高度
 - **7個測潮站** — 屯門（TMW）、鰂魚涌、赤鱲角、昂船洲、馬灣、大埔滘、塔門
 - **地震資訊** — 最近地震強度、地區、深度
 
 ### 🏖 泳灘水質 Beach Water Quality
+
 - **34 個法定泳灘** — 環保署水質等級（良好/尚可/欠佳）
 - **按地區篩選** — 西貢、南區、大嶼山、九龍、離島等
 
 ### 🗺 互動地圖 Interactive Map
+
 - **停車場空位** — 全港 562 個停車場實時空位，顏色標示（綠/藍/黃/紅）
 - **AQHI 監測站** — 15 個空氣質素監測站
 - **泳灘水質圖層** — 泳灘分佈及水質
 - **AED 心臟除顫器** — 25 個主要 AED 位置（醫院、MTR、商場）
 
 ### 🅿 停車場 Parking
+
 - **562 個停車場** — 私家車、電單車、輕型貨車空位
 - **地區篩選** — 按 18 區過濾
 - **名稱搜尋** — 即時搜尋停車場名稱
 
 ### 🏥 醫療 Healthcare
+
 - **急症室等候時間** — 全港所有公立醫院，每小時更新
 
 ### 🌬 環境 Environment
+
 - **AQHI 空氣質素健康指數** — 一般及路邊監測站預報
 - **健康建議** — 各等級對應健康指引
 
 ### 📅 假期 Holidays
+
 - **公眾假期** — 2024-2026 全部法定假期，倒計時下一個假期
 - **24 節氣** — 當前節氣及下一個節氣倒計時
 - **年份切換** — 2024/2025/2026 完整假期列表
 
 ### 📊 氣候 Climate
+
 - **每日平均氣溫** — HKO 實時數據，SVG 折線圖
 - **過去 12 個月** — 月均溫趨勢棒型圖
 - **1991-2020 氣候標準值** — 各月份歷史平均對照
 
 ### 💰 財經 Finance
+
 - **恒生指數** — 即時 HSI 指數，升跌幅（Yahoo Finance）
 - **港元匯率** — 兌美元、人民幣、英鎊、日元、歐元
 
 ### 🛥 大嶼山巴士 NLB
+
 - **64 條 NLB 路線** — 大嶼山、東涌、深圳灣口岸、迪士尼
 - **路線搜尋** — 按名稱/路線號過濾
 
 ### ♻ 回收資訊 Waste
+
 - **垃圾收集日** — 按星期顯示是否收集日
 - **三色回收箱** — 各類回收指引
 - **大型家電回收** — 預約電話及流程
 - **廚餘機** — 位置及使用說明
 
 ### 📷 道路快拍 CCTV
+
 - **24 個確認可用攝影機** — 青葵公路、城門隧道、大老山、觀塘繞道、元朗公路
 - **一鍵全部載入** — 同時查看所有攝影機
 - **每分鐘自動更新**
@@ -115,15 +130,18 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 這個儀表板支援 PWA（Progressive Web App），可以像原生 App 一樣安裝到手機主屏幕：
 
 **iOS (iPhone/iPad):**
+
 1. 用 Safari 打開網站
 2. 點擊底部分享按鈕 `⬆`
 3. 選「加入主畫面」
 
 **Android:**
+
 1. 用 Chrome 打開網站
 2. 點擊「安裝」提示橫幅，或選單 → 「安裝應用程式」
 
 **功能：**
+
 - ✅ 離線緩存 — 無網絡時顯示上次數據
 - ✅ 全屏顯示 — 無瀏覽器欄
 - ✅ 主屏幕圖示
@@ -132,22 +150,22 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 
 ## 🗂 Data Sources · 數據來源
 
-| 數據 | 來源 | API |
-|------|------|-----|
-| 天氣、潮汐、地震 | 香港天文台 HKO | `data.weather.gov.hk` |
-| 空氣質素 AQHI | 香港環保署 EPD | `datagovhk.blob.core.windows.net` |
-| 急症室等候時間 | 醫院管理局 HA | `ha.org.hk` |
-| MTR / 輕鐵班次 | 香港鐵路 MTR | `rt.data.gov.hk` |
-| KMB 九巴 ETA | 九龍巴士 | `data.etabus.gov.hk` |
-| CTB 城巴 ETA | 城巴 | `rt.data.gov.hk` |
-| GMB 專線小巴 | 運輸署 | `data.etagmb.gov.hk` |
-| NLB 嶼巴路線 | 新大嶼山巴士 | `rt.data.gov.hk` |
-| 停車場空位 | data.gov.hk | `api.data.gov.hk` |
-| 泳灘水質 | 環保署 EPD | 靜態數據（季度更新） |
-| 公眾假期 | 1823 | `1823.gov.hk` |
-| 恒生指數 | Yahoo Finance | `query1.finance.yahoo.com` |
-| 匯率 | Frankfurter | `api.frankfurter.app` |
-| 道路快拍 CCTV | 運輸署 | `tdcctv.data.one.gov.hk` |
+| 數據             | 來源           | API                               |
+| ---------------- | -------------- | --------------------------------- |
+| 天氣、潮汐、地震 | 香港天文台 HKO | `data.weather.gov.hk`             |
+| 空氣質素 AQHI    | 香港環保署 EPD | `datagovhk.blob.core.windows.net` |
+| 急症室等候時間   | 醫院管理局 HA  | `ha.org.hk`                       |
+| MTR / 輕鐵班次   | 香港鐵路 MTR   | `rt.data.gov.hk`                  |
+| KMB 九巴 ETA     | 九龍巴士       | `data.etabus.gov.hk`              |
+| CTB 城巴 ETA     | 城巴           | `rt.data.gov.hk`                  |
+| GMB 專線小巴     | 運輸署         | `data.etagmb.gov.hk`              |
+| NLB 嶼巴路線     | 新大嶼山巴士   | `rt.data.gov.hk`                  |
+| 停車場空位       | data.gov.hk    | `api.data.gov.hk`                 |
+| 泳灘水質         | 環保署 EPD     | 靜態數據（季度更新）              |
+| 公眾假期         | 1823           | `1823.gov.hk`                     |
+| 恒生指數         | Yahoo Finance  | `query1.finance.yahoo.com`        |
+| 匯率             | Frankfurter    | `api.frankfurter.app`             |
+| 道路快拍 CCTV    | 運輸署         | `tdcctv.data.one.gov.hk`          |
 
 > 所有數據來自香港政府官方開放數據平台 [data.gov.hk](https://data.gov.hk)，完全免費使用。
 
@@ -156,9 +174,11 @@ A comprehensive, real-time open-source city dashboard for Hong Kong using 100% g
 ## 🚀 Quick Start · 快速開始
 
 ### 直接使用
+
 打開 [Live Demo](https://github.com/badboyhong/hk-dashboard) 即可，無需安裝。
 
 ### 本地運行
+
 ```bash
 # Clone the repo
 git clone https://github.com/badboyhong/hk-dashboard.git
@@ -174,6 +194,7 @@ npx serve .
 打開 `http://localhost:8080`
 
 ### Replit 部署
+
 1. 打開 [replit.com](https://replit.com)
 2. 點「+ Create Repl」→「Import from GitHub」
 3. 輸入 `https://github.com/badboyhong/hk-dashboard`
@@ -215,14 +236,14 @@ hk-dashboard/
 
 ## 🛠 Tech Stack · 技術棧
 
-| 技術 | 用途 |
-|------|------|
-| Pure HTML/CSS/JS | 零依賴，無需構建工具 |
-| [Leaflet.js](https://leafletjs.com/) | 互動地圖（CDN） |
-| [CartoDB Tiles](https://carto.com/) | 深色/淺色地圖底圖 |
-| Service Worker | PWA 離線支援 |
-| CSS Custom Properties | 深色/淺色主題切換 |
-| Google Fonts | Noto Sans TC + Inter + JetBrains Mono |
+| 技術                                 | 用途                                  |
+| ------------------------------------ | ------------------------------------- |
+| Pure HTML/CSS/JS                     | 零依賴，無需構建工具                  |
+| [Leaflet.js](https://leafletjs.com/) | 互動地圖（CDN）                       |
+| [CartoDB Tiles](https://carto.com/)  | 深色/淺色地圖底圖                     |
+| Service Worker                       | PWA 離線支援                          |
+| CSS Custom Properties                | 深色/淺色主題切換                     |
+| Google Fonts                         | Noto Sans TC + Inter + JetBrains Mono |
 
 **無需任何後端、無需資料庫、無需 API key。**  
 完全靜態，可部署到任何靜態主機（GitHub Pages、Replit、Vercel、Netlify 等）。
@@ -258,6 +279,7 @@ git push origin feature/amazing-feature
 ```
 
 ### 想貢獻什麼？
+
 - 🔍 找到更多可用的 CCTV 攝影機代碼
 - 🌊 整合更多 data.gov.hk 開放 API
 - 🐛 修復 bug

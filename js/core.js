@@ -1,3 +1,5 @@
+/// <reference path = "./app.js" />
+
 /* ============================================================
    core.js — Theme, Clock, Lunar Date, Navigation
    香港城市儀表板 v2
