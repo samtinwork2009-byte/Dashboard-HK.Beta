@@ -1,0 +1,13 @@
+{
+	"name": "Dashboard-HK.Beta",
+	"version": "1.0.0",
+	"description": "",
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.8.0"
+	},
+	"scripts": {
+		"lint": "eslint",
+		"lint:fix": "eslint --fix"
+	}
+}
