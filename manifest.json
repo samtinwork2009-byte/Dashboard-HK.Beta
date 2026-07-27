@@ -23,8 +23,12 @@
   ],
   "categories": ["utilities", "weather", "travel"],
   "shortcuts": [
-    { "name": "天氣",   "url": "/index.html#weather",   "description": "查看天氣" },
-    { "name": "巴士",   "url": "/index.html#bus",        "description": "巴士到站" },
-    { "name": "停車場", "url": "/index.html#parking",    "description": "停車場空位" }
+    { "name": "天氣", "url": "/index.html#weather", "description": "查看天氣" },
+    { "name": "巴士", "url": "/index.html#bus", "description": "巴士到站" },
+    {
+      "name": "停車場",
+      "url": "/index.html#parking",
+      "description": "停車場空位"
+    }
   ]
 }
