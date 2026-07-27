@@ -238,6 +238,8 @@ function updateSummaryTime() {
   }
 }
 
+/*
+  ──old version code───────────────────────────────────── 
 function getWeatherEmoji(desc) {
   const text = (desc || "").toLowerCase();
   if (text.includes("雷")) return "⛈️";
@@ -249,6 +251,30 @@ function getWeatherEmoji(desc) {
   if (text.includes("霧") || text.includes("霧")) return "🌫️";
   if (text.includes("風")) return "🌬️";
   return "🌤️";
+}
+*/
+
+// New version with switch-case for better readability//
+function getWeatherEmoji(desc) {
+  const text = (desc || "").toLowerCase();
+  switch (true) {
+    case text.includes("雷"):
+      return "⛈️";
+    case text.includes("雪"):
+      return "❄️";
+    case text.includes("雨"):
+      return "🌧️";
+    case text.includes("晴"):
+      return "☀️";
+    case text.includes("雲"):
+      return "⛅";
+    case text.includes("霧"):
+      return "🌫️";
+    case text.includes("風"):
+      return "🌬️";
+    default:
+      return "🌤️";
+  }
 }
 
 function updateSummaryWeather(
