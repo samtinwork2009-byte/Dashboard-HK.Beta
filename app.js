@@ -93,15 +93,23 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 /* ── Load all data ─────────────────────────────────────────────── */
 async function loadAllData() {
-  await Promise.allSettled([
-    safeRun("Weather", () => Weather.refresh()),
-    safeRun("Transport", () => Transport.refresh()),
-    safeRun("Health", () => Health.refresh()),
-    safeRun("Environment", () => Environment.refresh()),
-    safeRun("Finance", () =>
-      typeof Finance !== "undefined" ? Finance.refresh() : Promise.resolve(),
-    ),
-  ]);
+  const tasks = [];
+  if (typeof Weather !== "undefined") {
+    tasks.push(safeRun("Weather", () => Weather.refresh()));
+  }
+  if (typeof Transport !== "undefined") {
+    tasks.push(safeRun("Transport", () => Transport.refresh()));
+  }
+  if (typeof Health !== "undefined") {
+    tasks.push(safeRun("Health", () => Health.refresh()));
+  }
+  if (typeof Environment !== "undefined") {
+    tasks.push(safeRun("Environment", () => Environment.refresh()));
+  }
+  if (typeof Finance !== "undefined") {
+    tasks.push(safeRun("Finance", () => Finance.refresh()));
+  }
+  await Promise.allSettled(tasks);
 }
 
 /* ── Bus preset init ──────────────────────────────────────────── */
@@ -113,28 +121,40 @@ function initBusPresets() {
 
 /* ── Auto-refresh ────────────────────────────────────────────── */
 function startAutoRefresh() {
+  const shouldRefresh = () => {
+    return document.visibilityState === "visible" && navigator.onLine;
+  };
+
   // Refresh weather/health/environment every 60 seconds
   setInterval(async () => {
+    if (!shouldRefresh()) return;
     await Promise.allSettled([
-      safeRun("Weather", () => Weather.refresh()),
-      safeRun("Health", () => Health.refresh()),
-      safeRun("Environment", () => Environment.refresh()),
-    ]);
+      typeof Weather !== "undefined" && safeRun("Weather", () => Weather.refresh()),
+      typeof Health !== "undefined" && safeRun("Health", () => Health.refresh()),
+      typeof Environment !== "undefined" && safeRun("Environment", () => Environment.refresh()),
+    ].filter(Boolean));
   }, 60000);
 
   // Transport-specific refresh every 10 seconds
   setInterval(async () => {
-    await safeRun("Transport", () => Transport.refresh());
+    if (!shouldRefresh()) return;
+    if (typeof Transport !== "undefined") {
+      await safeRun("Transport", () => Transport.refresh());
+    }
   }, 10000);
 
   // Bus presets every 45 seconds
   setInterval(async () => {
-    await safeRun("Bus", () => Bus.refresh());
+    if (!shouldRefresh()) return;
+    if (typeof Bus !== "undefined") {
+      await safeRun("Bus", () => Bus.refresh());
+    }
   }, 45000);
 
   // Parking every 5 minutes
   setInterval(async () => {
-    if (window._currentPage === "parking") {
+    if (!shouldRefresh() || window._currentPage !== "parking") return;
+    if (typeof Parking !== "undefined") {
       await safeRun("Parking", () => Parking.refresh());
     }
   }, 300000);
@@ -335,33 +355,141 @@ function renderTransportSummary(view) {
     '<div class="row-item"><span style="color:var(--text-faint)">目前無法顯示交通摘要。</span></div>';
 }
 
+const NEWS_CACHE_KEY = "hk_dashboard_news_cache";
+
 async function loadNewsSummary() {
   const container = document.getElementById("summary-news");
   if (!container) return;
-  const rssUrl = encodeURIComponent("https://www.hk01.com/feeds/rss");
-  const api = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+  const sourceUrl = "https://www.hk01.com/feeds/rss";
   try {
-    const res = await fetch(api);
-    if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
-    const items = (data.items || []).slice(0, 8);
+    const items = await fetchNewsFeed(sourceUrl);
     if (!items.length) throw new Error("no news");
-    const inner = document.createElement("div");
-    inner.className = "marquee-inner";
-    inner.innerHTML = items
-      .map(
-        (item) => `
+    saveNewsCache(items);
+    renderNewsItems(container, items);
+  } catch (e) {
+    console.warn("News fetch error:", e);
+    const cached = loadNewsCache();
+    if (cached.length) {
+      renderNewsItems(container, cached, true);
+      return;
+    }
+    container.textContent = "新聞載入失敗，請稍後重試。";
+  }
+}
+
+function renderNewsItems(container, items, isCache = false) {
+  const inner = document.createElement("div");
+  inner.className = "marquee-inner";
+  inner.innerHTML = items
+    .slice(0, 8)
+    .map(
+      (item) => `
       <a href="${item.link}" target="_blank" class="marquee-item">
         ${item.title}<time>${new Date(item.pubDate).toLocaleTimeString("zh-HK", { hour12: false, hour: "2-digit", minute: "2-digit" })}</time>
       </a>
     `,
-      )
-      .join("");
-    container.innerHTML = "";
-    container.appendChild(inner);
+    )
+    .join("");
+  container.innerHTML = "";
+  container.appendChild(inner);
+  if (isCache) {
+    const note = document.createElement("div");
+    note.style.cssText = "font-size:0.75rem;color:var(--text-faint);margin-top:8px";
+    note.textContent = "使用離線緩存新聞。";
+    container.appendChild(note);
+  }
+}
+
+function saveNewsCache(items) {
+  try {
+    localStorage.setItem(
+      NEWS_CACHE_KEY,
+      JSON.stringify({ timestamp: Date.now(), items: items.slice(0, 12) }),
+    );
   } catch (e) {
-    console.error("News fetch error:", e);
-    container.textContent = "新聞載入失敗，請稍後重試。";
+    console.warn("Unable to save news cache", e);
+  }
+}
+
+function loadNewsCache() {
+  try {
+    const stored = localStorage.getItem(NEWS_CACHE_KEY);
+    if (!stored) return [];
+    return JSON.parse(stored).items || [];
+  } catch (e) {
+    console.warn("Unable to read news cache", e);
+    return [];
+  }
+}
+
+async function fetchNewsFeed(url) {
+  const proxies = [
+    {
+      url: `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`,
+      parser: parseRss2JsonResponse,
+    },
+    {
+      url: `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+      parser: parseAllOriginsResponse,
+    },
+    {
+      url: `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      parser: parseRssTextResponse,
+    },
+  ];
+
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy.url);
+      if (!res.ok) throw new Error(`Proxy HTTP ${res.status}`);
+      const text = await res.text();
+      const items = proxy.parser(text);
+      if (items.length) return items;
+    } catch (e) {
+      console.warn(`News proxy failed: ${proxy.url}`, e);
+    }
+  }
+  throw new Error("All news proxies failed");
+}
+
+function parseRss2JsonResponse(text) {
+  try {
+    const data = JSON.parse(text);
+    return (data.items || []).map((item) => ({
+      title: item.title || item.title_noFormatting || "(無標題)",
+      link: item.link || item.guid || "#",
+      pubDate: item.pubDate || item.pubDate || new Date().toISOString(),
+    }));
+  } catch (e) {
+    return [];
+  }
+}
+
+function parseAllOriginsResponse(text) {
+  try {
+    const data = JSON.parse(text);
+    return parseRssTextResponse(data.contents || "");
+  } catch (e) {
+    return [];
+  }
+}
+
+function parseRssTextResponse(xmlText) {
+  if (!xmlText) return [];
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlText, "text/xml");
+    return Array.from(doc.querySelectorAll("item")).slice(0, 8).map((item) => {
+      const title = item.querySelector("title")?.textContent || "(無標題)";
+      const link = item.querySelector("link")?.textContent || "#";
+      const pubDate =
+        item.querySelector("pubDate")?.textContent ||
+        item.querySelector("dc\\:date")?.textContent ||
+        new Date().toISOString();
+      return { title, link, pubDate };
+    });
+  } catch (e) {
+    return [];
   }
 }
 
@@ -461,7 +589,7 @@ async function safeRun(label, fn) {
 }
 
 /* ── Page change hook ────────────────────────────────────────── */
-const _origShowPage = window.showPage;
+const _origShowPage = typeof window.showPage === "function" ? window.showPage : function () {};
 window.showPage = function (name) {
   _origShowPage(name);
   // Trigger immediate refresh for the newly visible page

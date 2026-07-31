@@ -10,7 +10,7 @@
     />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#0d1b2e" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
@@ -187,8 +187,8 @@
           <a
             href="#"
             class="nav-tab"
-            data-page="transport"
-            onclick="showPage('transport')"
+            data-page="bus"
+            onclick="showPage('bus')"
             role="tab"
           >
             <svg
@@ -3617,7 +3617,7 @@
     </aside>
 
     <script src="js/core.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/chart.umd.min.js"></script>
     <script src="js/weather.js"></script>
     <script src="js/nowcast.js"></script>
     <script src="js/weather-detail.js"></script>
@@ -3634,7 +3634,6 @@
     <script src="js/holidays.js"></script>
     <script src="js/climate.js"></script>
     <script src="js/beach.js"></script>
-    <script src="js/map.js"></script>
     <script src="js/finance.js"></script>
     <script src="js/waste.js"></script>
     <script src="js/app.js"></script>
@@ -3642,6 +3641,17 @@
       // Register Service Worker (PWA)
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
+          const supportedOrigin =
+            window.location.protocol === "https:" ||
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1";
+          if (!supportedOrigin) {
+            console.warn(
+              "[PWA] SW not registered on unsupported origin:",
+              window.location.href,
+            );
+            return;
+          }
           navigator.serviceWorker
             .register("/sw.js")
             .then((reg) => {
@@ -3762,7 +3772,7 @@
           <div class="dashboard-footer-icon">📡</div>
           <div>
             <div class="dashboard-footer-title">
-              Dashboard-HK.Beta Version 3.1.0
+              Dashboard-HK.Beta Version 4.0.0
             </div>
             <div class="dashboard-footer-sub">
               © 2026 Create By 【 Sam.T 】 · Copyright © 2026 Sam.T. All rights
@@ -3771,7 +3781,7 @@
           </div>
         </div>
         <div class="dashboard-footer-meta">
-          <span class="footer-pill">🗓️ Last edit: 17/07/2026</span>
+          <span class="footer-pill">🗓️ Last edit: 31/07/2026</span>
           <span class="footer-pill">📱 Desktop · Laptop · Mobile · TV</span>
           <span class="footer-pill">⚡ Auto-responsive display</span>
         </div>

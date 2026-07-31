@@ -3,7 +3,7 @@
    PWA: offline cache + background sync
    ============================================================ */
 
-const CACHE_NAME = "hk-dashboard-v5";
+const CACHE_NAME = "hk-dashboard-v6";
 const STATIC_URLS = [
   "/",
   "/index.html",
@@ -24,8 +24,21 @@ const STATIC_URLS = [
   "/js/beach.js",
   "/js/map.js",
   "/js/app.js",
+  "/manifest.json",
   "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
 ];
+
+function createCacheRequest(url) {
+  try {
+    const requestUrl = new URL(url, self.location.origin);
+    if (requestUrl.origin !== self.location.origin) {
+      return new Request(url, { mode: "cors" });
+    }
+  } catch (e) {
+    // fallback to default string request
+  }
+  return url;
+}
 
 /* ── Install: cache all static assets ───────────────────────── */
 self.addEventListener("install", (event) => {
@@ -34,7 +47,7 @@ self.addEventListener("install", (event) => {
       .open(CACHE_NAME)
       .then((cache) => {
         return Promise.allSettled(
-          STATIC_URLS.map((url) => cache.add(url).catch(() => {})),
+          STATIC_URLS.map((url) => cache.add(createCacheRequest(url)).catch(() => {})),
         );
       })
       .then(() => self.skipWaiting()),
@@ -59,8 +72,9 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
-  // Skip non-GET requests
+  // Skip non-GET and unsupported scheme requests
   if (event.request.method !== "GET") return;
+  if (!/^https?:$/.test(url.protocol)) return;
 
   // API calls: network-first with cache fallback
   const isAPI = [
@@ -81,14 +95,19 @@ self.addEventListener("fetch", (event) => {
         .then((response) => {
           if (response.ok) {
             const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              // Cache API responses for 5 minutes max
-              cache.put(event.request, clone);
-            });
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
           return response;
         })
-        .catch(() => caches.match(event.request)),
+        .catch(() => caches.match(event.request))
+        .then((cached) =>
+          cached ||
+          new Response(JSON.stringify({ error: "offline" }), {
+            headers: { "Content-Type": "application/json" },
+            status: 503,
+            statusText: "Service Unavailable",
+          }),
+        ),
     );
     return;
   }
@@ -101,17 +120,18 @@ self.addEventListener("fetch", (event) => {
         .then((response) => {
           if (response.ok) {
             const clone = response.clone();
-            caches
-              .open(CACHE_NAME)
-              .then((cache) => cache.put(event.request, clone));
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
           return response;
         })
         .catch(() => {
-          // Return offline fallback for HTML pages
           if (event.request.destination === "document") {
             return caches.match("/index.html");
           }
+          return new Response("Service Unavailable", {
+            status: 503,
+            statusText: "Service Unavailable",
+          });
         });
     }),
   );
