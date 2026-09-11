@@ -29,6 +29,24 @@
     <link rel="stylesheet" href="css/base.css" />
   </head>
   <body>
+    <svg class="liquid-icon-defs" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="liquidIconGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#dbeafe" />
+          <stop offset="42%" stop-color="#60a5fa" />
+          <stop offset="100%" stop-color="#22d3ee" />
+        </linearGradient>
+        <linearGradient id="liquidWarmGradient" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#fbbf24" />
+          <stop offset="55%" stop-color="#fb7185" />
+          <stop offset="100%" stop-color="#fff7ed" />
+        </linearGradient>
+        <filter id="liquidIconGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.4" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+    </svg>
     <!-- ══ TOP NAV ══ -->
     <nav class="topnav" role="navigation">
       <a href="#" class="topnav-logo" onclick="showPage('home')">
@@ -432,6 +450,18 @@
       </div>
 
       <div class="nav-right">
+        <button
+          class="utility-btn"
+          id="global-search-toggle"
+          type="button"
+          aria-label="搜尋工具"
+          title="搜尋工具"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+          </svg>
+        </button>
         <div class="clock-block">
           <div class="clock-hms" id="clockHMS">--:--:--</div>
           <div class="clock-date" id="clockDate">---</div>
@@ -456,7 +486,7 @@
         <a
           href="#"
           onclick="
-            showPage('transport');
+            showPage('bus');
             toggleMoreMenu();
           "
           >巴士</a
@@ -535,6 +565,20 @@
         >
       </div>
     </nav>
+    <section id="global-search" class="global-search hidden" role="dialog" aria-modal="true" aria-labelledby="global-search-title">
+      <div class="global-search-panel">
+        <div class="global-search-head">
+          <div>
+            <div id="global-search-title" class="card-title">搜尋城市工具</div>
+            <div class="card-sub">搜尋頁面、交通、環境及民生服務</div>
+          </div>
+          <button id="global-search-close" class="icon-btn" type="button" aria-label="關閉搜尋">✕</button>
+        </div>
+        <label class="sr-only" for="global-search-input">搜尋工具</label>
+        <input id="global-search-input" class="global-search-input" type="search" autocomplete="off" placeholder="例如：巴士、停車場、潮汐" />
+        <div id="global-search-results" class="global-search-results" aria-live="polite"></div>
+      </div>
+    </section>
     <div class="page-body">
       <!-- ══ WEATHER WARNING BANNER (shown only when active warnings) ══ -->
       <div id="warning-banner" class="warning-banner">
@@ -1571,7 +1615,7 @@
                   <option value="AUTO">自動（KMB / CTB / 其他）</option>
                   <option value="KMB">九巴 KMB</option>
                   <option value="CTB">城巴 CTB</option>
-                  <option value="LWB">龍運 LWB</option>
+                  <option value="LWB" disabled>龍運 LWB（暫未支援）</option>
                   <option value="NLB">嶼巴 NLB</option>
                   <option value="MTR">MTR Bus</option>
                 </select>
@@ -1869,7 +1913,7 @@
                 <option value="AUTO">自動（KMB / CTB / 其他）</option>
                 <option value="KMB">九巴 KMB</option>
                 <option value="CTB">城巴 CTB</option>
-                <option value="LWB">龍運 LWB</option>
+                <option value="LWB" disabled>龍運 LWB（暫未支援）</option>
                 <option value="NLB">嶼巴 NLB</option>
                 <option value="MTR">MTR Bus</option>
               </select>
@@ -3617,7 +3661,7 @@
     </aside>
 
     <script src="js/core.js"></script>
-    <script src="js/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="js/weather.js"></script>
     <script src="js/nowcast.js"></script>
     <script src="js/weather-detail.js"></script>
@@ -3636,7 +3680,7 @@
     <script src="js/beach.js"></script>
     <script src="js/finance.js"></script>
     <script src="js/waste.js"></script>
-    <script src="js/app.js"></script>
+    <script src="app.js"></script>
     <script>
       // Register Service Worker (PWA)
       if ("serviceWorker" in navigator) {
@@ -3653,7 +3697,7 @@
             return;
           }
           navigator.serviceWorker
-            .register("/sw.js")
+            .register(new URL("sw.js", document.baseURI).href)
             .then((reg) => {
               console.log("[PWA] Service Worker registered:", reg.scope);
             })
@@ -3770,18 +3814,28 @@
       <div class="dashboard-footer-inner">
         <div class="dashboard-footer-brand">
           <div class="dashboard-footer-icon">📡</div>
-          <div>
+          <div class="dashboard-footer-copy">
             <div class="dashboard-footer-title">
-              Dashboard-HK.Beta Version 4.0.0
+              <span class="footer-brand-title">香港一站式實時儀表板平台</span>
+              <span class="footer-sep">·</span>
+              <span class="footer-test-tag">測試版本</span>
+            </div>
+            <div class="dashboard-footer-title dashboard-footer-title-en">
+              <span class="footer-brand-title-en">Hong Kong Dashboard Web Dashboard Platform</span>
+              <span class="footer-sep">·</span>
+              <span class="footer-test-tag-en">Test Version</span>
+            </div>
+            <div class="dashboard-footer-version-row">
+              <span class="footer-version">版本 : 5.0.1 (No : HKDashBoard.dev.5.0.1)</span>
+              <span class="footer-version-en">Version: 5.0.1 (No: HKDashBoard.dev.5.0.1)</span>
             </div>
             <div class="dashboard-footer-sub">
-              © 2026 Create By 【 Sam.T 】 · Copyright © 2026 Sam.T. All rights
-              reserved.
+              <span class="footer-copyright">© 2026 Create By 【 Sam.T 】 · Copyright © 2026 Sam.T. All rights reserved. 版權所有© 2026 Sam.T.</span>
             </div>
           </div>
         </div>
         <div class="dashboard-footer-meta">
-          <span class="footer-pill">🗓️ Last edit: 31/07/2026</span>
+          <span class="footer-pill">🗓️ Last edit: 11/09/2026</span>
           <span class="footer-pill">📱 Desktop · Laptop · Mobile · TV</span>
           <span class="footer-pill">⚡ Auto-responsive display</span>
         </div>

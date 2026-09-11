@@ -2,7 +2,7 @@
   "name": "香港一站式實時儀表板平台",
   "short_name": "HK 儀表板平台",
   "description": "香港一站式實時儀表板平台：氣象、交通、環保、財經、新聞即時總覽",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0d1b2e",
   "theme_color": "#0d1b2e",
@@ -23,11 +23,11 @@
   ],
   "categories": ["utilities", "weather", "travel"],
   "shortcuts": [
-    { "name": "天氣", "url": "/index.html#weather", "description": "查看天氣" },
-    { "name": "巴士", "url": "/index.html#bus", "description": "巴士到站" },
+    { "name": "天氣", "url": "./index.html#weather", "description": "查看天氣" },
+    { "name": "巴士", "url": "./index.html#bus", "description": "巴士到站" },
     {
       "name": "停車場",
-      "url": "/index.html#parking",
+      "url": "./index.html#parking",
       "description": "停車場空位"
     }
   ]

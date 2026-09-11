@@ -3,41 +3,67 @@
    PWA: offline cache + background sync
    ============================================================ */
 
-const CACHE_NAME = "hk-dashboard-v6";
+const CACHE_NAME = "hk-dashboard-v9";
+const BASE_URL = new URL("./", self.location.href);
+const assetUrl = (path) => new URL(path, BASE_URL).href;
 const STATIC_URLS = [
-  "/",
-  "/index.html",
-  "/css/tokens.css",
-  "/css/base.css",
-  "/js/core.js",
-  "/js/weather.js",
-  "/js/transport.js",
-  "/js/health.js",
-  "/js/environment.js",
-  "/js/cctv.js",
-  "/js/bus.js",
-  "/js/tides.js",
-  "/js/parking.js",
-  "/js/ferry.js",
-  "/js/holidays.js",
-  "/js/climate.js",
-  "/js/beach.js",
-  "/js/map.js",
-  "/js/app.js",
-  "/manifest.json",
+  assetUrl(""),
+  assetUrl("index.html"),
+  assetUrl("css/tokens.css"),
+  assetUrl("css/base.css"),
+  assetUrl("js/core.js"),
+  assetUrl("js/nowcast.js"),
+  assetUrl("js/weather-detail.js"),
+  assetUrl("js/station-panel.js"),
+  assetUrl("js/weather.js"),
+  assetUrl("js/transport.js"),
+  assetUrl("js/health.js"),
+  assetUrl("js/environment.js"),
+  assetUrl("js/cctv.js"),
+  assetUrl("js/bus.js"),
+  assetUrl("js/tides.js"),
+  assetUrl("js/parking.js"),
+  assetUrl("js/ferry.js"),
+  assetUrl("js/holidays.js"),
+  assetUrl("js/climate.js"),
+  assetUrl("js/beach.js"),
+  assetUrl("js/finance.js"),
+  assetUrl("js/waste.js"),
+  assetUrl("js/map.js"),
+  assetUrl("app.js"),
+  assetUrl("manifest.json"),
+  "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js",
   "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
 ];
 
 function createCacheRequest(url) {
   try {
-    const requestUrl = new URL(url, self.location.origin);
+    const requestUrl = new URL(url);
     if (requestUrl.origin !== self.location.origin) {
       return new Request(url, { mode: "cors" });
     }
+    return new Request(requestUrl.href);
   } catch (e) {
     // fallback to default string request
   }
   return url;
+}
+
+function createOfflineApiResponse(request) {
+  const body = JSON.stringify({
+    error: "offline",
+    status: 503,
+    url: request.url,
+  });
+  return new Response(body, {
+    status: 503,
+    statusText: "Service Unavailable",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-HK-Dashboard-Offline": "1",
+    },
+  });
 }
 
 /* ── Install: cache all static assets ───────────────────────── */
@@ -83,10 +109,13 @@ self.addEventListener("fetch", (event) => {
     "data.etabus.gov.hk",
     "data.etagmb.gov.hk",
     "api.data.gov.hk",
+    "www.news.gov.hk",
+    "www.info.gov.hk",
     "datagovhk.blob.core.windows.net",
     "www.ha.org.hk",
-    "api.allorigins.win",
     "tdcctv.data.one.gov.hk",
+    "query1.finance.yahoo.com",
+    "api.frankfurter.app",
   ].some((host) => url.hostname.includes(host));
 
   if (isAPI) {
@@ -99,15 +128,28 @@ self.addEventListener("fetch", (event) => {
           }
           return response;
         })
-        .catch(() => caches.match(event.request))
-        .then((cached) =>
-          cached ||
-          new Response(JSON.stringify({ error: "offline" }), {
-            headers: { "Content-Type": "application/json" },
-            status: 503,
-            statusText: "Service Unavailable",
-          }),
-        ),
+        .catch(() => {
+          return caches.match(event.request).then((cached) => {
+            if (cached) return cached;
+            return new Response(
+              JSON.stringify({
+                error: "offline",
+                status: 200,
+                url: event.request.url,
+                source: "hk-dashboard-service-worker-fallback",
+              }),
+              {
+                status: 200,
+                statusText: "OK",
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8",
+                  "Cache-Control": "no-store",
+                  "X-HK-Dashboard-Offline": "1",
+                },
+              },
+            );
+          });
+        }),
     );
     return;
   }
@@ -126,7 +168,7 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => {
           if (event.request.destination === "document") {
-            return caches.match("/index.html");
+            return caches.match(assetUrl("index.html"));
           }
           return new Response("Service Unavailable", {
             status: 503,
